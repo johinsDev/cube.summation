@@ -11,10 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [
+    'uses' => 'CubeController@home',
+    'as'   => 'home'
+]);
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+/* CUBE WITH SESSIOn */
+
+Route::post('/init' , [
+    'uses' => 'CubeController@init',
+    'as'   => 'init.cube'
+]);
