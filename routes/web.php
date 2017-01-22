@@ -28,6 +28,6 @@ Route::post('/init' , [
 ]);
 
 Route::post('/create' , [
-   'uses' => 'CubeController@cube',
+   'uses' => 'CubeController@create',
     'as'  =>  'cube.create'
 ]);

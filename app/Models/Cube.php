@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cube extends Model
 {
+    protected $fillable = ['n' , 'm' , 'cube'];
     protected $m , $n , $cube;
 
     /**
@@ -13,9 +14,10 @@ class Cube extends Model
      * @param array $n
      */
 
-    public function __construct($n)
+    public function __construct($n , $m)
     {
         $this->setNValue($n);
+        $this->setMValue($m);
         $this->createCube();
     }
 
@@ -37,12 +39,12 @@ class Cube extends Model
      * ACCESORS
      */
 
-    public function getMValue()
+    public function getMAttribute()
     {
         return $this->m;
     }
 
-    public function getNValue()
+    public function getNAttribute()
     {
         return $this->n;
     }
@@ -60,12 +62,12 @@ class Cube extends Model
             }
         }
     }
-    public function update($x, $y, $z, $w)
+    public function updateCube($x, $y, $z, $w)
     {
         $this->cube[$x - 1][$y - 1][$z - 1] = $w;
     }
 
-    public function newQuery($x1, $y1, $z1, $x2, $y2, $z2)
+    public function queryCube($x1, $y1, $z1, $x2, $y2, $z2)
     {
         $sum = 0;
         for ($i = $x1 - 1; $i < $x2; ++$i) {
@@ -77,4 +79,25 @@ class Cube extends Model
         }
         return $sum;
     }
-}
+    
+    public function saveMValue($val)
+    {
+        session()->put('queries' , $val);
+    }
+    
+    public function getValue($value)
+    {
+        return session()->get($value);
+    }
+    
+    public function restart($session)
+    {
+        $value = $this->getValue($session);
+        $this->saveMValue($value <= 0 ?: $value- 1);
+    }
+    
+    public function has($session)
+    {
+        return  $this->getValue($session) > 0;
+    }
+}   

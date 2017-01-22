@@ -4,9 +4,13 @@
 
 
             <div class="container">
-
-                <h1>Cube Summation using the Database</h1>
-                <h3></h3>
+                @if(session()->has('info'))
+                    <div class="alert alert-info">
+                        <p>{{ session()->get('info') }}</p>
+                    </div>
+                @endif
+                <h1>Cube Summation using the Session</h1>
+                <h3>{{ session()->has('cube') ? '3 X '.session()->get('cube')->n : 'None Cube'  }}</h3>
 
                 <div class="divider"></div>
 
@@ -26,9 +30,13 @@
                         <div class="col-md-6">
                             <p class="text-danger">NOTE: This deletes the old matrix and queries</p>
                             @if(count($errors))
-                                @foreach($errors->all() as $error)
-                                    <p class="text-warning">{{ $error }}</p>
-                                @endforeach
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach($errors->all() as $error)
+                                            <li>{{$error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -38,6 +46,11 @@
 
                 @if (session()->has('test_cases'))
                     @include('partials.create')
+                    @if(session()->has('cube') && session()->get('cube')->has('queries'))
+                        <div class="divider"></div>
+
+                        <div class="divider"></div>
+                     @endif
                 @endif
             </div>
         </main>
