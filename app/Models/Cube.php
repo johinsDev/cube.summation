@@ -8,6 +8,11 @@ class Cube extends Model
 {
     protected $m , $n , $cube;
 
+    /**
+     * Cube constructor.
+     * @param array $n
+     */
+
     public function __construct($n)
     {
         $this->setNValue($n);
