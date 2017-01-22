@@ -31,3 +31,8 @@ Route::post('/create' , [
    'uses' => 'CubeController@create',
     'as'  =>  'cube.create'
 ]);
+
+Route::post('/update' , [
+    'uses' => 'CubeController@update',
+    'as'  =>  'cube.update'
+]);

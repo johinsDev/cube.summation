@@ -1,4 +1,5 @@
-<form method="POST" action="{{ route('cube.update') }}" accept-charset="UTF-8"><input name="_token" type="hidden" value="mNZ7OJidLVCRPV6vrJ8fwmEAbVRjnypYgLiyiXqy">
+<form method="POST" action="{{ route('cube.update') }}" accept-charset="UTF-8">
+    {!! csrf_field() !!}
     <h4>Update a Matrix cell</h4>
     <div class="row">
         <div class="col-md-2">

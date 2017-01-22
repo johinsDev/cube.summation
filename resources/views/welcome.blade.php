@@ -9,6 +9,11 @@
                         <p>{{ session()->get('info') }}</p>
                     </div>
                 @endif
+                    @if(session()->has('error'))
+                        <div class="alert alert-danger">
+                            <p>{{ session()->get('error') }}</p>
+                        </div>
+                    @endif
                 <h1>Cube Summation using the Session</h1>
                 <h3>{{ session()->has('cube') ? '3 X '.session()->get('cube')->n : 'None Cube'  }}</h3>
 
@@ -48,8 +53,9 @@
                     @include('partials.create')
                     @if(session()->has('cube') && session()->get('cube')->has('queries'))
                         <div class="divider"></div>
-
+                            @include('partials.update')
                         <div class="divider"></div>
+                            @include('partials.query')
                      @endif
                 @endif
             </div>
