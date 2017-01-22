@@ -10,12 +10,17 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label for="size" class="control-label">Commands (queries and updates) (size from 1 to 1000)</label>
+                <label for="size" class="control-label">Commands (queries and updates) </label>
                 <input class="form-control" name="commands"  type="number"  value="{{ session()->has('cube') ? session()->get('cube')->m : 1  }}" id="commands">
             </div>
         </div>
-        <div class="col-md-4">
-            <input class="btn btn-primary" name="submit-btn" type="submit" value="Create new Cube">
-        </div>
+
+        @if(session()->get('test_cases') > 0)
+            <div class="col-md-4">
+                <input class="btn btn-primary" name="submit-btn" type="submit" value="Create new Cube">
+            </div>
+        @else
+            <p class="text-warning">You dont have more test. Create a new.</p>
+        @endif
     </div>
 </form>

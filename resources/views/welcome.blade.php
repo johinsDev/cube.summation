@@ -26,7 +26,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="size" class="control-label">Num Test (size from 1 to 50)</label>
-                                <input class="form-control" name="test_cases_num" max="50" type="number"  value="{{ session()->has('test_cases') ? session()->get('test_cases') : 1}}" id="test_cases">
+                                <input class="form-control" name="test_cases_num" max="50" type="number"  value="{{ session()->has('test_cases') && session()->get('test_cases') > 0 ? session()->get('test_cases') : 1}}" id="test_cases">
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -48,16 +48,44 @@
                 </form>
 
                 <div class="divider"></div>
+                <div class="row">
+                    <div class="col-md-8">
+                        @if (session()->has('test_cases'))
+                            @include('partials.create')
+                            @if(session()->has('cube') && session()->get('cube')->has('queries'))
+                                <div class="divider"></div>
+                                @include('partials.update')
+                                <div class="divider"></div>
+                                @include('partials.query')
+                            @endif
+                        @endif
+                    </div>
+                    <div class="col-md-4">
+                        @if (session()->has('queries_history'))
+                            <div class="panel panel-info">
+                                <div class="panel-heading">History</div>
+                                <div class="panel-body">
+                                    <ul>
+                                        @foreach(session()->get('queries_history') as $key => $query)
+                                            <br>
+                                            <p>Test case #{{ $key + 1}}</p>
+                                            @foreach($query as $i => $q)
+                                                @if($i == -1)
+                                                    <li style="list-style: none"><strong>{{ $q }}</strong></li>
+                                                    <br>
+                                                @else
+                                                    <li>{{ $q }}</li>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
 
-                @if (session()->has('test_cases'))
-                    @include('partials.create')
-                    @if(session()->has('cube') && session()->get('cube')->has('queries'))
-                        <div class="divider"></div>
-                            @include('partials.update')
-                        <div class="divider"></div>
-                            @include('partials.query')
-                     @endif
-                @endif
+
             </div>
         </main>
     @endsection

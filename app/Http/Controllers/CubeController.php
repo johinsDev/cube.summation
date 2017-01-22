@@ -19,8 +19,11 @@ class CubeController extends Controller
         ]);
 
         session()->remove('cube');
-        session()->put('test_cases' , $request->get('test_cases_num'));
 
+        session()->remove('queries_history');
+
+        session()->put('test_cases' , $request->get('test_cases_num'));
+        
         return redirect()->route('home');
     }
 
@@ -31,8 +34,17 @@ class CubeController extends Controller
             'size' => 'required|integer|between:1,100',
         ]);
 
+        if (!session()->get('test_cases'))
+            return redirect()->route('home')->withError('Dont have more tests.create new');
+            
         $cube = new Cube($request->get('size') , $request->get('commands'));
+
+        session()->put('test_cases' , session()->get('test_cases') - 1);
+
         $cube->saveMValue($request->get('commands'));
+
+        $cube->setValue('queries_history' , 'Create new cube 3 X '.$request->get('size') , -1);
+
         $request->session()->put('cube', $cube);
 
         return redirect()->route('home')->withInfo('Cube create');
@@ -61,8 +73,45 @@ class CubeController extends Controller
             return redirect()->route('home')->withError('You don not have more commands');
 
         $cube->updateCube($input['x'] - 1, $input['y'] - 1, $input['z'] - 1, $input['value']);
+
+        $message = 'Update cell '.$input['x'].' '.$input['y'].' '.$input['z'].' to: '.$input['value'];
+
         $cube->restart('queries');
 
-        return redirect()->route('home')->withInfo('Update cell '.$input['x'].' '.$input['y'].' '.$input['z'].' to: '.$input['value']);
+        $cube->setValue('queries_history' , $message);
+
+        return redirect()->route('home')->withInfo($message);
+    }
+
+    public function query(Request $request)
+    {
+        $cube = session()->get('cube');
+
+
+        $this->validate($request, [
+            'x1' => 'required|numeric|min:1|between:1,'.$request->get('x2'),
+            'x2' => 'required|numeric|min:1|between:'.(int) $request->get('x1').','.(int) $cube->n,
+            'y1' => 'required|numeric|min:1|between:1,'.$request->get('y2'),
+            'y2' => 'required|numeric|min:1|between:'.$request->get('y1').','.$cube->n,
+            'z1' => 'required|numeric|min:1|between:1,'.$request->get('z2'),
+            'z2' => 'required|numeric|min:1|between:'.$request->get('z1').','.$cube->n,
+        ]);
+
+        if (!$cube)
+            return redirect()->route('home')->withError('Cube not exists');
+
+        $values = $request->only('x1', 'x2', 'y1', 'y2', 'z1', 'z2');
+
+        if (!$cube->has('queries'))
+            return redirect()->route('home')->withError('You don not have more commands');
+        
+        $result = $cube->queryCube($values['x1']-1, $values['y1']-1, $values['z1']-1, $values['x2']-1, $values['y2']-1, $values['z2']-1);
+        $message = 'The sum of cells between '.$values['x1'].' '.$values['y1'].' '.$values['z1'].' and '.$values['x2'].' '.$values['y2'].' '.$values['z2'].' is: '.$result;
+        
+        $cube->restart('queries');
+        
+        $cube->setValue('queries_history' , $message);
+        
+        return redirect()->route('home')->withInfo($message);
     }
 }

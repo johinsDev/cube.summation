@@ -64,16 +64,17 @@ class Cube extends Model
     }
     public function updateCube($x, $y, $z, $w)
     {
-        $this->cube[$x - 1][$y - 1][$z - 1] = $w;
+        $this->cube[$x][$y][$z] = $w;
     }
 
     public function queryCube($x1, $y1, $z1, $x2, $y2, $z2)
     {
         $sum = 0;
-        for ($i = $x1 - 1; $i < $x2; ++$i) {
-            for ($j = $y1 - 1; $j < $y2; ++$j) {
-                for ($k = $z1 - 1; $k < $z2; ++$k) {
-                    $sum += $this->cube[$i][$j][$k];
+        for ($i = $x1; $i <= $x2; $i++) {
+            for ($j = $y1; $j <= $y2; $j++) {
+                for ($k = $z1; $k <= $z2; $k++) {
+                    $sum += (int) $this->cube[$i][$j][$k];
+                    
                 }
             }
         }
@@ -82,12 +83,19 @@ class Cube extends Model
     
     public function saveMValue($val)
     {
-        session()->put('queries' , $val);
+        session()->put('queries' ,$val);
+    }
+    
+    public function setValue($session , $val , $pos = null)
+    {
+        $data = $this->getValue($session);
+        $data[session()->get('test_cases')][$pos ?? $this->getValue('queries')] = $val;
+        session()->put($session , $data);
     }
     
     public function getValue($value)
     {
-        return session()->get($value);
+        return  session()->get($value);
     }
     
     public function restart($session)

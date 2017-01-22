@@ -36,3 +36,8 @@ Route::post('/update' , [
     'uses' => 'CubeController@update',
     'as'  =>  'cube.update'
 ]);
+
+Route::post('/query' , [
+    'uses' => 'CubeController@query',
+    'as'  =>  'cube.query'
+]);
