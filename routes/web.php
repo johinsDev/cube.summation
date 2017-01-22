@@ -26,3 +26,8 @@ Route::post('/init' , [
     'uses' => 'CubeController@init',
     'as'   => 'init.cube'
 ]);
+
+Route::post('/create' , [
+   'uses' => 'CubeController@cube',
+    'as'  =>  'cube.create'
+]);

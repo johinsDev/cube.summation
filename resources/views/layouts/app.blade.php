@@ -19,6 +19,16 @@
             'csrfToken' => csrf_token(),
         ]); ?>
     </script>
+    <style>
+        .divider {
+            height: 5px;
+            width: 100%;
+            display: block;
+            margin: 18px 0;
+            overflow: hidden;
+            background-color: #e5e5e5;
+        }
+    </style>
 </head>
 <body>
     <div id="app">

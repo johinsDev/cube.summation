@@ -13,7 +13,7 @@ class CubeController extends Controller
 
     public function init(Request $request)
     {
-        $this->validate( $request->all() , [
+        $this->validate( $request , [
             'test_cases_num' => 'required|integer|between:1,50'
         ]);
 
